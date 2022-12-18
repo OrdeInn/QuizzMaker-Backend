@@ -12,23 +12,23 @@ datasource db {
   extensions = [uuidOssp(map: "uuid-ossp"), pgcrypto]
 }
 
-model User {
+model Users {
   id              String       @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
   createdAt       DateTime     @default(now())
   email           String       @unique
   password        String
   emailConfirmed  Boolean      @default(false)
-  Quizzes         Quizz[]
+  Quizzes         Quizzes[]
 }
 
-model Quizz {
-  id          String      @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
-  user      User         @relation(fields: [userId], references: [id])
-  userId    String       @db.Uuid
-  Questions   Question[]
+model Quizzes {
+  id          String        @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  user        Users         @relation(fields: [userId], references: [id])
+  userId      String        @db.Uuid
+  Questions   Questions[]
 }
 
-model Question {
+model Questions {
   id          String    @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
   question    String    @db.VarChar(800)
   option1     String    @db.VarChar(800)
@@ -36,6 +36,6 @@ model Question {
   option3     String    @db.VarChar(800)
   option4     String    @db.VarChar(800)
   option5     String    @db.VarChar(800)
-  quizz       Quizz     @relation(fields: [quizzId], references: [id])
+  quizz       Quizzes   @relation(fields: [quizzId], references: [id])
   quizzId     String    @db.Uuid
 }
