@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp"), pgcrypto]
+}
+
+model User {
+  id              String       @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  createdAt       DateTime     @default(now())
+  email           String       @unique
+  password        String
+  emailConfirmed  Boolean      @default(false)
+  Quizzes         Quizz[]
+}
+
+model Quizz {
+  id          String      @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  user      User         @relation(fields: [userId], references: [id])
+  userId    String       @db.Uuid
+  Questions   Question[]
+}
+
+model Question {
+  id          String    @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  question    String    @db.VarChar(800)
+  option1     String    @db.VarChar(800)
+  option2     String    @db.VarChar(800)
+  option3     String    @db.VarChar(800)
+  option4     String    @db.VarChar(800)
+  option5     String    @db.VarChar(800)
+  quizz       Quizz     @relation(fields: [quizzId], references: [id])
+  quizzId     String    @db.Uuid
+}
