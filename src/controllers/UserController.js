@@ -13,7 +13,7 @@ async function signUp(req, res, next) {
 
     if (serviceResult.error) {
         res.status(500).send({ message: serviceResult.errorMsg });
-        next();
+        return;
     }
 
     res.send(serviceResult.userObj);
@@ -27,12 +27,12 @@ async function signin(req, res, next) {
 
     if (serviceResult.error) {
         res.status(500).send({ message:serviceResult.errorMsg });
-        next();
+        return;
     }
 
     if (!user) {
         res.status(404).send({ message: `User cannot found with email: ${userEmail}`});
-        next();
+        return;
     }
 
     let passwordIsValid = bcrypt.compareSync(
@@ -42,7 +42,7 @@ async function signin(req, res, next) {
 
     if (!passwordIsValid) {
         res.status(401).send({ accessToken: null, message: `Invalid password!`});
-        next();
+        return;
     }
 
     let token = jwt.sign({ id: user.id }, config.secret, {expiresIn: 86400});
@@ -52,8 +52,6 @@ async function signin(req, res, next) {
         email: user.email,
         accessToken: token
     });
-
-    next();
 }
 
 module.exports = {
