@@ -30,6 +30,8 @@ const verifySignupRequest = async (req, res, next) => {
     } catch (err) {
         res.status(500).send({ message: "Something went wrong!" });
     }
+    
+    next();
 };
 
 const verifyToken = (req, res, next) => {
@@ -40,16 +42,18 @@ const verifyToken = (req, res, next) => {
 
         token = authHeader.replace(config.bearerString, "");
     } else {
-        return res.status(403).send({ message: "Auth token is missing!" });
+        res.status(403).send({ message: "Auth token is missing!" });
+        return;
     }
   
     jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
-            return res.status(401).send({ message: "Unauthorized!" });
-      }
-      req.userId = decoded.id;
+            res.status(401).send({ message: "Unauthorized!" });
+            return;
+        }
+        req.userId = decoded.id;
 
-      return next();
+        next();
     });
 };
 

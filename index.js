@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 const userRouter = require('./src/routes/UserRoutes');
+const quizzRouter = require('./src/routes/QuizzRoutes');
 
 app.use(bodyParser.json());
 app.use(
@@ -13,6 +14,7 @@ app.use(
 );
 
 app.use('/user', userRouter);
+app.use('/quizz', quizzRouter);
 
 app.get('/', (req,res) => {
     res.send({ message: 'Hello World!'} );
