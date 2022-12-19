@@ -19,6 +19,7 @@ CREATE TABLE "Users" (
 CREATE TABLE "Quizzes" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v1(),
     "userId" UUID NOT NULL,
+    "title" TEXT NOT NULL,
 
     CONSTRAINT "Quizzes_pkey" PRIMARY KEY ("id")
 );

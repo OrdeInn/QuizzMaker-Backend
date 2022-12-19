@@ -25,6 +25,7 @@ model Quizzes {
   id          String        @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
   user        Users         @relation(fields: [userId], references: [id])
   userId      String        @db.Uuid
+  title       String
   Questions   Questions[]
 }
 
