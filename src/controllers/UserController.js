@@ -45,7 +45,7 @@ async function signin(req, res, next) {
         return;
     }
 
-    let token = jwt.sign({ id: user.id }, config.secret, {expiresIn: 86400});
+    let token = jwt.sign({ id: user.id }, config.secret, {expiresIn: "1h"});
     
     res.status(200).send({
         id: user.id,
