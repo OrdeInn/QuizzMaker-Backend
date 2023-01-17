@@ -10,7 +10,7 @@ async function signUp(req, res, next) {
     };
     
     const serviceResult = await UserService.createNewUser(newUserRequest);
-
+    console.log(serviceResult);
     if (serviceResult.error) {
         res.status(500).send({ message: serviceResult.errorMsg });
         return;
@@ -20,6 +20,8 @@ async function signUp(req, res, next) {
 }
 
 async function signin(req, res, next) {
+    console.log('Signin REQUEST');
+    //TODO request body verification
     const userEmail = req.body.email;
     
     const serviceResult = await UserService.findByEmail(userEmail);
