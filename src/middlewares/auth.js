@@ -1,20 +1,26 @@
+const { request } = require("express");
 const jwt = require("jsonwebtoken");
 const config = require("../configs/auth.configs");
+const respMessages = require("../configs/resp.messages");
 const UserService = require('../services/UserService');
 
-const verifySignupRequest = async (req, res, next) => {
+const verifyCredentials = (req, res, next) => {
     if (!req.body.email) {
-        res.status(400).send({ message: "Email cannot be empty!" });
+        res.status(400).send({ message: respMessages.credentials.emptyEmail });
         return;
     }
 
     if (!req.body.password) {
-        res.status(400).send({ message: "Password cannot be empty!" });
+        res.status(400).send({ message: respMessages.credentials.emptyPassword });
         return;
     }
 
+    next();
+}
+
+const verifySignupRequest = async (req, res, next) => {
     if (req.body.password.length < 8) {
-        res.status(400).send({ message: "Password should be at least 8 characters!" });
+        res.status(400).send({ message: respMessages.credentials.shortPassword });
         return;
     }
 
@@ -22,13 +28,13 @@ const verifySignupRequest = async (req, res, next) => {
         const serviceResponse = await UserService.findByEmail(req.body.email);
 
         if (serviceResponse.error) {
-            res.status(500).send({ message: "Something went wrong!" });
+            res.status(500).send({ message: respMessages.generalError });
             
         } else if (serviceResponse.userObj) {
-            res.status(400).send({ message: "This email is already in use!" });
+            res.status(400).send({ message: respMessages.emailInUse });
         }
     } catch (err) {
-        res.status(500).send({ message: "Something went wrong!" });
+        res.status(500).send({ message: respMessages.generalError });
     }
     
     next();
@@ -42,13 +48,13 @@ const verifyToken = (req, res, next) => {
 
         token = authHeader.replace(config.bearerString, "");
     } else {
-        res.status(403).send({ message: "Auth token is missing!" });
+        res.status(403).send({ message: respMessages.missingToken });
         return;
     }
   
     jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
-            res.status(401).send({ message: "Unauthorized!" });
+            res.status(401).send({ message: respMessages.unauthorized });
             return;
         }
         req.userId = decoded.id;
@@ -58,6 +64,7 @@ const verifyToken = (req, res, next) => {
 };
 
 module.exports = {
+    verifyCredentials: verifyCredentials,
     verifyToken: verifyToken,
     verifySignupRequest: verifySignupRequest
 }
