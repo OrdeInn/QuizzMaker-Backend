@@ -47,6 +47,28 @@ function UserService () {
 
         return serviceResult;
     }
+
+    this.getUserById = async function (userId) {
+        const serviceResult = {
+            error: false
+        };
+
+        try {
+            serviceResult.userObj = await prisma.users.findUnique({
+                where: {
+                  id: userId,
+                },
+                include: {
+                    Quizzes: true
+                },
+            });
+        } catch (err) {
+            serviceResult.error = true;
+            serviceResult.errorMsg = `Error while getting user: ${userId}. ${err.message}`;
+        }
+
+        return serviceResult;
+    }
 }
 
 module.exports = new UserService();

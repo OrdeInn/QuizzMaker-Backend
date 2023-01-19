@@ -55,7 +55,28 @@ async function signin(req, res, next) {
     });
 }
 
+async function getUser(req, res, next) {
+    const userId = req.userId;
+    const serviceResult = await UserService.getUserById(userId);
+    const user = serviceResult.userObj;
+
+    if (serviceResult.error) {
+        res.status(500).send({ message: serviceResult.errorMsg });
+        return;
+    }
+
+    if (!user) {
+        res.status(404).send({ message: `${respMessages.credentials.userNotFound} ${userId}`});
+        return;
+    }
+
+    res.status(200).send({
+        user: user
+    });
+}
+
 module.exports = {
     signUp: signUp,
-    signin: signin
+    signin: signin,
+    getUser: getUser
 }
