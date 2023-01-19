@@ -1,0 +1,14 @@
+{
+    "credentials": {
+        "emptyEmail": "Email cannot be empty!",
+        "emptyPassword": "Password cannot be empty!",
+        "shortPassword": "Password should be at least 8 characters!",
+        "invalidPassword": "Invalid password!",
+        "userNotFound": "User cannot found with email:",
+        "emailInUse": "This email is already in use!"
+    },
+    "generalLoginError": "Invalid credentials",
+    "generalError": "Something went wrong!",
+    "missingToken": "Auth token is missing!",
+    "unauthorized": "Unauthorized!"
+}

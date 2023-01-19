@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("../configs/auth.configs");
+const respMessages = require("../configs/resp.messages");
 const UserService = require('../services/UserService');
 
 async function signUp(req, res, next) {
@@ -20,20 +21,18 @@ async function signUp(req, res, next) {
 }
 
 async function signin(req, res, next) {
-    console.log('Signin REQUEST');
-    //TODO request body verification
     const userEmail = req.body.email;
     
     const serviceResult = await UserService.findByEmail(userEmail);
     const user = serviceResult.userObj;
 
     if (serviceResult.error) {
-        res.status(500).send({ message:serviceResult.errorMsg });
+        res.status(500).send({ message: serviceResult.errorMsg, generalMessage: respMessages.generalError});
         return;
     }
 
     if (!user) {
-        res.status(404).send({ message: `User cannot found with email: ${userEmail}`});
+        res.status(404).send({ message: `${respMessages.credentials.userNotFound} ${userEmail}`, generalMessage: respMessages.generalLoginError});
         return;
     }
 
@@ -43,7 +42,7 @@ async function signin(req, res, next) {
     );
 
     if (!passwordIsValid) {
-        res.status(401).send({ accessToken: null, message: `Invalid password!`});
+        res.status(401).send({ accessToken: null, message: respMessages.credentials.invalidPassword, generalMessage: respMessages.generalLoginError});
         return;
     }
 

@@ -22,7 +22,7 @@ export default function Login() {
             })
             .then((data) => {
                 if (status != '200') {
-                    setErrorMessage(data.message);
+                    setErrorMessage(data.generalMessage);
                     setIsLoggedIn(false);
                 } else {
                     setErrorMessage(null);
