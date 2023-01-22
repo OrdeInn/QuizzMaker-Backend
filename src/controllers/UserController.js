@@ -48,11 +48,21 @@ async function signin(req, res, next) {
 
     let token = jwt.sign({ id: user.id }, config.secret, {expiresIn: "1h"});
     
-    res.status(200).send({
-        id: user.id,
-        email: user.email,
-        accessToken: token
-    });
+    const responseHeaders = {
+        "Content-Type": "application/json",
+        "set-cookie": [
+          `accessToken=${token}; Path=/; HttpOnly;`
+        ],
+    };
+    
+    res .status(200)
+        .cookie("accessToken", config.bearerString + token, {
+            expires: new Date(Date.now() + 3600), 
+            httpOnly: true 
+        })
+        .send({
+            error: false
+        });
 }
 
 async function getUser(req, res, next) {

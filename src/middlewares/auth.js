@@ -41,12 +41,11 @@ const verifySignupRequest = async (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-    let authHeader = req.headers["authorization"];
+    let authToken = req.cookies.accessToken;
     let token;
 
-    if (authHeader && authHeader.startsWith(config.bearerString)){
-
-        token = authHeader.replace(config.bearerString, "");
+    if (authToken && authToken.startsWith(config.bearerString)){
+        token = authToken.replace(config.bearerString, "");
     } else {
         res.status(403).send({ message: respMessages.missingToken });
         return;

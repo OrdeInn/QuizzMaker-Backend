@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import styles from '../../styles/Login.module.css';
 
 export default function Login() {
@@ -13,7 +13,8 @@ export default function Login() {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({email: e.target.email.value, password: e.target.password.value})
+            body: JSON.stringify({email: e.target.email.value, password: e.target.password.value}),
+            credentials: "include"
         };
         let status = null;
 
