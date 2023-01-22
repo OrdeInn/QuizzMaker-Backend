@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router'
 import styles from '../../styles/Login.module.css';
 
 export default function Login() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const router = useRouter();
     
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,6 +29,7 @@ export default function Login() {
                 } else {
                     setErrorMessage(null);
                     setIsLoggedIn(true);
+                    router.push("/profile");
                 }
             })
             .catch(e => console.log(e));
