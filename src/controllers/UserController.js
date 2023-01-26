@@ -57,7 +57,7 @@ async function signin(req, res, next) {
     
     res .status(200)
         .cookie("accessToken", config.bearerString + token, {
-            expires: new Date(Date.now() + 3600), 
+            expires: new Date(Date.now() + 360000), 
             httpOnly: true 
         })
         .send({
