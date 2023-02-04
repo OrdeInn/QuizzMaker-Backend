@@ -5,6 +5,8 @@
     justify-content: flex-start;
     flex-direction: column;
     background-color: #f8f9fd;
+    min-width: 100vh;
+    min-height: 100vh;
 }
 .quiz {
     display: flex;
@@ -27,11 +29,20 @@
 
 }
 
+.profileContainer {
+    display: flex;
+    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
 .profileImg {
     background: lightblue;
     border-radius: 50%;
     width: 10vh;
     height: 10vh;
+    margin-bottom: 1rem;
 }
 
 .quizContainer {
@@ -40,4 +51,5 @@
     justify-content: center;
     flex-direction: column;
     margin-top: 100px;
+    width: 100%;
 }

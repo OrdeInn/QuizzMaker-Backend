@@ -1,35 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import styles from '../../styles/Profile.module.css';
 
 export default function Profile() {
     const [isFetched, setIsFetched] = useState(false);
     const [user, setUser] = useState({});
+    const router = useRouter();
 
-    function test () {
+    useEffect(() => {
+        if (!user) {
+            router.push('/login');
+        }
+    }, [isFetched]);
+
+    function test() {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include'
         };
-        console.log('triggering fetch!')
         fetch('http://localhost:8080/user/', requestOptions)
-        .then((response) => response.json())
-        .then((data) => {
-            setIsFetched(true);
-            setUser(data.user);
-        })
-        .catch(e => console.log(e));
+            .then((response) => response.json())
+            .then((data) => {
+                setIsFetched(true);
+                setUser(data.user);
+            })
+            .catch(e => console.log(e));
     }
-
-    if(!isFetched) {
+    if (!isFetched) {
         test();
     }
-    return(
+    return (
         <div className={styles.container}>
-            <div className={styles.profileImg}>
-            </div>
-            <div className={styles.userName}>
-                {user ? user.email : 'TEST'}
+            <div className={styles.profileContainer}>
+                <div className={styles.profileImg}></div>
+                <div className={styles.userName}>
+                    {user ? user.email : ''}
+                </div>
             </div>
             <div className={styles.quizContainer}>
                 <div className={styles.quiz}>
